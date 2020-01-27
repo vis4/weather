@@ -1,7 +1,7 @@
 <script>
     import Paragraph from '../components/Paragraph.svelte';
     import Section from '../components/Section.svelte';
-    import { today, formatTemp } from '../stores';
+    import { today, formatTemp, niceDate } from '../stores';
 
     $: diffAvg = $today.tAvg - $today.tAvgBase;
     $: warmer = diffAvg > 1;
@@ -13,11 +13,11 @@
 <Section>
     <Paragraph>
         <span>
-            The daily average temperature of {@html $formatTemp($today.tAvg)} was
+            With {@html $formatTemp($today.tAvg)}, the daily average temperature on {$niceDate} was
             {#if warmer}
-            <b class="has-text-danger">{@html $formatTemp(diffAvg)} warmer</b> than normal.
+            <b class="has-text-danger">about {@html $formatTemp(Math.round(diffAvg))} warmer</b> than normal.
             {:else if colder}
-            <b class="has-text-info">{@html $formatTemp(-diffAvg)} colder</b> than normal.
+            <b class="has-text-info">about {@html $formatTemp(Math.round(-diffAvg))} colder</b> than normal.
             {:else}
             pretty normal.
             {/if}

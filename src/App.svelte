@@ -8,6 +8,8 @@
     import NavBar from './partials/NavBar.svelte';
     import StationSelect from './partials/StationSelect.svelte';
     import Temperature from './partials/Temperature.svelte';
+    import TemperatureAvg from './partials/TemperatureAvg.svelte';
+    import Rain from './partials/Rain.svelte';
 
     import { beforeUpdate } from 'svelte';
     import {
@@ -38,7 +40,8 @@
             dateRaw: d.date,
             tMin: +d.TNK,
             tAvg: +d.TMK,
-            tMax: +d.TXK
+            tMax: +d.TXK,
+            precip: +d.RSK
         }
     };
 
@@ -88,7 +91,7 @@
     }
 </style>
 
-<NavBar />
+<!-- <NavBar /> -->
 
 <section lang={$language} class="section">
     <div class="container">
@@ -102,4 +105,8 @@
 
 {#if $today}
 <Temperature />
+<TemperatureAvg />
+{/if}
+{#if $today && $today.sumPrecip7 !== undefined}
+<Rain />
 {/if}
