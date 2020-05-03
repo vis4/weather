@@ -21,6 +21,11 @@ export const contextMaxYear = derived(
 export const fmtShort = timeFormat('%b %d');
 
 export const today = derived([stationData, curDateFmt, contextMinYear, contextMaxYear], ([data, fmt, minYr, maxYr]) => {
+    let last;
+    data.forEach(row => {
+        if (last) last.previous = row;
+        last = row;
+    });
     const row = data.find(r => r.dateRaw === fmt) || data[0];
     if (!row) return {};
     const allTime = data.filter(r =>
@@ -38,8 +43,19 @@ export const today = derived([stationData, curDateFmt, contextMinYear, contextMa
         tMaxRank: (tMaxHigher.length+1),
         ...aggregateNDays(row, 7),
         ...aggregateNDays(row, 30),
+        ...noRainForDays(row),
         ...row
     };
+    function noRainForDays(day) {
+        let noRainFor = 0;
+        while (day.precip === 0) {
+            noRainFor++;
+            day = day.previous;
+        }
+        return {
+            noRainFor
+        }
+    }
     function aggregateNDays(row, n) {
         // compute stats for today
         const out = aggregate(row.date);

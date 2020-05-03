@@ -17,7 +17,8 @@
 
     $: heatRecord = $today.tMaxRank < 5;
 </script>
-
+{$today.noRainFor}
+{#if $today.sumPrecip30 !== undefined}
 <Section>
     <Paragraph>
 <!--         <span>
@@ -30,6 +31,10 @@
             pretty normal.
             {/if}
         </span> -->
+
+        {#if $today.noRainFor > 3}
+        <span>There has been no rain for {$today.noRainFor} days.</span>
+        {/if}
 
         <span>
             There was a total of {@html $today.sumPrecip30.toFixed(1)}mm of rain over the last 30 days. That's
@@ -47,3 +52,4 @@
 
     </Paragraph>
 </Section>
+{/if}

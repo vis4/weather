@@ -8,6 +8,7 @@
     import NavBar from './partials/NavBar.svelte';
     import StationSelect from './partials/StationSelect.svelte';
     import Temperature from './partials/Temperature.svelte';
+    import DailyTemp from './charts/DailyTemp.svelte';
     import TemperatureAvg from './partials/TemperatureAvg.svelte';
     import Rain from './partials/Rain.svelte';
 
@@ -52,7 +53,7 @@
         if (!station) return;
         console.log('loading...');
         promise = csv(
-            `/data/dwd/stations/${station.id}.csv`,
+            `https://vis4.net/data/dwd/stations/${station.id}.csv`,
             parseRow
         ).then(res => {
             $stationData = res;
@@ -105,6 +106,8 @@
 
 {#if $today}
 <Temperature />
+<DailyTemp />
+
 <TemperatureAvg />
 {/if}
 {#if $today && $today.sumPrecip7 !== undefined}
